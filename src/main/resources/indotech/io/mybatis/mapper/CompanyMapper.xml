@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="indotech.io.mybatis.mapper.CompanyMapper">
+    <insert id="create" parameterType="indotech.io.mybatis.model.dto.CompanyDTO">
+        <selectKey order="AFTER" keyProperty="id" resultType="java.math.BigDecimal">
+            SELECT CURRVAL('company_id_seq')
+        </selectKey>
+        INSERT INTO COMPANY
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">NAME,</if>
+            <if test="companyType != null">COMPANY_TYPE,</if>
+            <if test="createdAt != null">CREATED_AT,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="companyType != null">#{companyType},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+        </trim>
+    </insert>
+    <update id="update" parameterType="indotech.io.mybatis.model.dto.CompanyDTO">
+        UPDATE COMPANY SET
+        <trim suffixOverrides=",">
+            <if test="name != null">NAME = #{name},</if>
+            <if test="companyType != null">COMPANY_TYPE = #{companyType},</if>
+        </trim>
+        WHERE ID = #{id}
+    </update>
+    <delete id="delete">
+        DELETE FROM COMPANY
+        WHERE ID = #{id}
+    </delete>
+    <select id="findById" resultType="indotech.io.mybatis.model.dto.CompanyDTO">
+        select A.ID, A.NAME,
+        A.COMPANY_TYPE, B.NAME AS COMPANY_TYPE_NAME,
+        A.CREATED_AT
+        from COMPANY A
+        JOIN COMPANY_TYPE B ON A.COMPANY_TYPE = B.ID
+        WHERE A.ID = #{id}
+    </select>
+    <select id="getCompanyList" resultType="indotech.io.mybatis.model.dto.CompanyDTO">
+        select A.ID, A.NAME,
+        A.COMPANY_TYPE, B.NAME AS COMPANY_TYPE_NAME,
+        A.CREATED_AT
+        from COMPANY A
+        JOIN COMPANY_TYPE B ON A.COMPANY_TYPE = B.ID
+        <if test="sortField != null and sortOrder != null">
+            ORDER BY ${sortField} ${sortOrder}
+        </if>
+        <if test="offset >= 0">
+            OFFSET #{offset}
+        </if>
+        <if test="limit >= 0">
+            LIMIT #{limit}
+        </if>
+    </select>
+
+    <select id="countCompany" resultType="Integer">
+        select COUNT(*)
+        from COMPANY A
+        JOIN COMPANY_TYPE B ON A.COMPANY_TYPE = B.ID
+    </select>
+</mapper>
