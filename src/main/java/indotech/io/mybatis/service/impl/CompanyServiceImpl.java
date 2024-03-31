@@ -24,18 +24,18 @@ public class CompanyServiceImpl implements CompanyService {
     private final CompanyMapper companyMapper;
 
     @Override
-    public PaginationDataResponse<CompanyDTO> getDataWithPagination(int page, int limit, String sortField, String sortOrder) {
+    public PaginationDataResponse<CompanyDTO> getDataWithPagination(int page, int limit, String orderField, String orderType) {
         try {
             Map<String, String> allowedOrder = new HashMap<>();
             allowedOrder.put("createdAt", "created_at");
-            String sortColumn = "created_at";
-            if ( allowedOrder.containsKey(sortField) ) {
-                sortColumn = allowedOrder.getOrDefault(sortField, null);
+            String orderColumn = "created_at";
+            if ( allowedOrder.containsKey(orderField) ) {
+                orderColumn = allowedOrder.getOrDefault(orderField, null);
             }
-            String sortType = Objects.equals(sortOrder, "DESC") ? "DESC": "ASC";
+            orderType = Objects.equals(orderType, "DESC") ? "DESC": "ASC";
 
             int offset = (page-1)*limit;
-            List<CompanyDTO> pageResult = companyMapper.getCompanyList(offset, limit, sortColumn, sortType);
+            List<CompanyDTO> pageResult = companyMapper.getCompanyList(offset, limit, orderColumn, orderType);
             Integer countResult = companyMapper.countCompany();
 
             return new PaginationDataResponse<>(

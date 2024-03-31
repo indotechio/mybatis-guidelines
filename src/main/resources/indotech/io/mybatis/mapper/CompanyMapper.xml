@@ -44,8 +44,8 @@
         A.CREATED_AT
         from COMPANY A
         JOIN COMPANY_TYPE B ON A.COMPANY_TYPE = B.ID
-        <if test="sortField != null and sortOrder != null">
-            ORDER BY ${sortField} ${sortOrder}
+        <if test="orderField != null and orderType != null">
+            ORDER BY ${orderField} ${orderType}
         </if>
         <if test="offset >= 0">
             OFFSET #{offset}

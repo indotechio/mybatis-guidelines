@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper
 public interface CompanyMapper {
-    List<CompanyDTO> getCompanyList(@Param("offset") int offset, @Param("limit") int limit, @Param("sortField") String sortField, @Param("sortOrder") String sortOrder);
+    List<CompanyDTO> getCompanyList(@Param("offset") int offset, @Param("limit") int limit, @Param("orderField") String orderField, @Param("orderType") String orderType);
     Integer countCompany();
     CompanyDTO findById(@Param("id") BigDecimal id);
     void create(CompanyDTO company);
